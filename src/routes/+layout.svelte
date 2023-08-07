@@ -41,7 +41,7 @@
 		<div id="view">
 			<slot />
 		</div>
-		<div id="map" />
+		<div id="map" class:loading={map == null} class:loaded={map != null} />
 	</div>
 </QueryClientProvider>
 
@@ -56,6 +56,17 @@
 	}
 	#map {
 		grid-column: 2;
+		background: #87f0ff;
+		transition: all 2s;
+	}
+
+	.loading {
+		filter: blur(20px) grayscale(1);
+		opacity: 0;
+	}
+
+	.loaded {
+		opacity: 1;
 	}
 
 	#view {
