@@ -27,7 +27,7 @@
 	};
 </script>
 
-<div>
+<div class="container">
 	<h1>Expedition</h1>
 	<h3>ADV Maps Australia</h3>
 	{#if $rides.isLoading}
@@ -38,7 +38,8 @@
 		<div class="ride-list">
 			{#each $rides.data as ride}
 				<button on:click={() => onButtonClick(ride.id)}>
-					{ride.name}
+					<span class="name">{ride.name}</span>
+					<span class="distance">{Math.round(ride.total_distance / 1000)}km</span>
 				</button>
 			{/each}
 		</div>
@@ -46,20 +47,33 @@
 </div>
 
 <style>
+	.container {
+		padding: 17px;
+	}
 	.ride-list {
 		display: flex;
 		flex-direction: column;
+		margin-top: 16px;
 	}
 
 	.ride-list button {
 		background: white;
-		color: black;
 		border: none;
 		cursor: pointer;
 		text-align: left;
-		padding: 16px;
+		padding-top: 16px;
+		padding-bottom: 16px;
+		padding-left: 8px;
+		padding-right: 8px;
 		font-size: 16px;
 		border-bottom: 1px solid #eee;
+		display: flex;
+		justify-content: space-between;
+	}
+	.ride-list button .name {
 		color: #ee3333;
+	}
+	.ride-list button .distance {
+		color: black;
 	}
 </style>
