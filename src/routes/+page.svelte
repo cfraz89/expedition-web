@@ -11,12 +11,20 @@
 		queryFn: () => appKy('rides').json<ListRide[]>()
 	});
 
+	let rideMap: Map<string, Ride> = new Map();
 	const getMap: () => mapboxgl.Map = getContext<() => mapboxgl.Map>('map');
 
 	const onButtonClick = async (rideId: string) => {
-		const ride = await appKy(`rides/${rideId}`).json<Ride>();
+		let ride = rideMap.get(rideId) ?? (await appKy(`rides/${rideId}`).json<Ride>());
+		rideMap.set(rideId, ride);
 		const map = getMap();
 		(map.getSource('selected_ride') as GeoJSONSource).setData(ride.geo_json);
+	};
+
+	const zoomRide = async (rideId: string) => {
+		let ride = rideMap.get(rideId) ?? (await appKy(`rides/${rideId}`).json<Ride>());
+		rideMap.set(rideId, ride);
+		const map = getMap();
 		let { bbox } = ride.geo_json;
 		if (bbox) {
 			let bounds = map.cameraForBounds(bbox as LngLatBoundsLike, { padding: 80, pitch: 60 });
@@ -37,10 +45,21 @@
 	{:else if $rides.isSuccess}
 		<div class="ride-list">
 			{#each $rides.data as ride}
-				<button on:click={() => onButtonClick(ride.id)}>
-					<span class="name">{ride.name}</span>
-					<span class="distance">{Math.round(ride.total_distance / 1000)}km</span>
-				</button>
+				<button class="ride" on:click={() => onButtonClick(ride.id)}>
+					<button on:click={() => zoomRide(ride.id)}>Zoom</button>
+					<div class="name-distance">
+						<span class="name">{ride.name}</span>
+						<span class="distance">{Math.round(ride.total_distance / 1000)}km</span>
+					</div>
+					<div class="start-address">
+						<div class="label">Start</div>
+						<div>{ride.start_address?.formatted_address}</div>
+					</div>
+					<div class="end-address">
+						<div class="label">End</div>
+						<div>{ride.end_address?.formatted_address}</div>
+					</div></button
+				>
 			{/each}
 		</div>
 	{/if}
@@ -49,6 +68,7 @@
 <style>
 	.container {
 		padding: 17px;
+		color: #333;
 	}
 	.ride-list {
 		display: flex;
@@ -56,7 +76,8 @@
 		margin-top: 16px;
 	}
 
-	.ride-list button {
+	.ride {
+		color: #666;
 		background: white;
 		border: none;
 		cursor: pointer;
@@ -68,12 +89,34 @@
 		font-size: 16px;
 		border-bottom: 1px solid #eee;
 		display: flex;
-		justify-content: space-between;
+		flex-direction: column;
+		gap: 8px;
 	}
-	.ride-list button .name {
+
+	.name-distance {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 8px;
+	}
+
+	.ride .name {
+		font-weight: bold;
+		color: #cc3333;
+	}
+	.ride .distance {
+		color: #cc3333;
+	}
+
+	.ride .label {
+		font-size: 12px;
+		font-weight: bold;
 		color: #ee3333;
 	}
-	.ride-list button .distance {
-		color: black;
+
+	.start-address,
+	.end-address {
+		display: flex;
+		gap: 16px;
+		align-items: center;
 	}
 </style>
