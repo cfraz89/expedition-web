@@ -1,5 +1,7 @@
 import { PUBLIC_MAPBOX_ACCESS_TOKEN } from '$env/static/public';
 import mapboxgl from 'mapbox-gl';
+import { getContext } from 'svelte';
+import { writable } from 'svelte/store';
 
 export function initMap() {
 	mapboxgl.accessToken = PUBLIC_MAPBOX_ACCESS_TOKEN;
@@ -40,3 +42,6 @@ export function initMap() {
 
 	return map;
 }
+
+//Get the map from context
+export const appMap = writable<mapboxgl.Map>();

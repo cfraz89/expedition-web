@@ -1,38 +1,55 @@
 <script lang="ts">
+	import { appMap } from '$lib/map';
 	import { appKy } from '$lib/net';
 	import type { ListRide, Ride } from '$lib/types';
 	import { createQuery } from '@tanstack/svelte-query';
-	import ky from 'ky';
 	import type { GeoJSONSource, LngLatBoundsLike } from 'mapbox-gl';
-	import { getContext } from 'svelte';
+	import { derived, writable } from 'svelte/store';
 
 	const rides = createQuery({
 		queryKey: ['rides'],
 		queryFn: () => appKy('rides').json<ListRide[]>()
 	});
 
-	let rideMap: Map<string, Ride> = new Map();
-	const getMap: () => mapboxgl.Map = getContext<() => mapboxgl.Map>('map');
+	let selectedRideId = writable<string>();
 
-	const onButtonClick = async (rideId: string) => {
-		let ride = rideMap.get(rideId) ?? (await appKy(`rides/${rideId}`).json<Ride>());
-		rideMap.set(rideId, ride);
-		const map = getMap();
-		(map.getSource('selected_ride') as GeoJSONSource).setData(ride.geo_json);
-	};
-
-	const zoomRide = async (rideId: string) => {
-		let ride = rideMap.get(rideId) ?? (await appKy(`rides/${rideId}`).json<Ride>());
-		rideMap.set(rideId, ride);
-		const map = getMap();
-		let { bbox } = ride.geo_json;
+	const selectedRide = createQuery(
+		derived(selectedRideId, ($id) => ({
+			queryKey: ['ride', $id],
+			queryFn: () => appKy(`rides/${$id}`).json<Ride>(),
+			enabled: $id != null
+		}))
+	);
+	$: if ($selectedRide.data) {
+		($appMap.getSource('selected_ride') as GeoJSONSource).setData($selectedRide.data.geo_json);
+		let { bbox } = $selectedRide.data.geo_json;
 		if (bbox) {
-			let bounds = map.cameraForBounds(bbox as LngLatBoundsLike, { padding: 80, pitch: 60 });
+			let bounds = $appMap.cameraForBounds(bbox as LngLatBoundsLike, {
+				padding: 80,
+				pitch: 60
+			});
 			if (bounds) {
-				map.flyTo(bounds);
+				$appMap.flyTo(bounds);
 			}
 		}
-	};
+	}
+
+	function formatAddress(address: google.maps.GeocoderAddressComponent[]) {
+		const end = address.findIndex(
+			(c) => c.types.find((t) => t.startsWith('administrative_area') || t === 'country') != null
+		);
+		return address
+			.slice(0, end)
+			.reduceRight(
+				(addr: string | undefined, c) =>
+					addr
+						? c.types.includes('street_number')
+							? `${c.short_name} ${addr}`
+							: `${c.short_name}, ${addr}`
+						: c.short_name,
+				undefined
+			);
+	}
 </script>
 
 <div class="container">
@@ -45,19 +62,24 @@
 	{:else if $rides.isSuccess}
 		<div class="ride-list">
 			{#each $rides.data as ride}
-				<button class="ride" on:click={() => onButtonClick(ride.id)}>
-					<button on:click={() => zoomRide(ride.id)}>Zoom</button>
+				<button
+					class="ride"
+					on:click={() => {
+						selectedRideId.set(ride.id);
+					}}
+					class:selected={$selectedRideId === ride.id}
+				>
 					<div class="name-distance">
 						<span class="name">{ride.name}</span>
 						<span class="distance">{Math.round(ride.total_distance / 1000)}km</span>
 					</div>
-					<div class="start-address">
+					<div class="start">
 						<div class="label">Start</div>
-						<div>{ride.start_address?.formatted_address}</div>
+						<div>{ride.start_address ? formatAddress(ride.start_address) : 'N/A'}</div>
 					</div>
-					<div class="end-address">
+					<div class="end">
 						<div class="label">End</div>
-						<div>{ride.end_address?.formatted_address}</div>
+						<div>{ride.end_address ? formatAddress(ride.end_address) : 'N/A'}</div>
 					</div></button
 				>
 			{/each}
@@ -93,6 +115,10 @@
 		gap: 8px;
 	}
 
+	.ride.selected {
+		background: #aaaaee;
+	}
+
 	.name-distance {
 		display: flex;
 		justify-content: space-between;
@@ -113,8 +139,8 @@
 		color: #ee3333;
 	}
 
-	.start-address,
-	.end-address {
+	.start,
+	.end {
 		display: flex;
 		gap: 16px;
 		align-items: center;

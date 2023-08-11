@@ -2,7 +2,7 @@
 	import { onMount, setContext } from 'svelte';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { browser } from '$app/environment';
-	import { initMap } from '$lib/map';
+	import { initMap, appMap } from '$lib/map';
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -11,11 +11,8 @@
 		}
 	});
 
-	let map: mapboxgl.Map | undefined;
-	setContext('map', () => map);
-
 	onMount(() => {
-		map = initMap();
+		appMap.set(initMap());
 	});
 </script>
 
@@ -41,7 +38,7 @@
 		<div id="view">
 			<slot />
 		</div>
-		<div id="map" class:loading={map == null} class:loaded={map != null} />
+		<div id="map" class:loading={$appMap == null} class:loaded={$appMap != null} />
 	</div>
 </QueryClientProvider>
 

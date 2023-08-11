@@ -1,9 +1,12 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@googlemaps/js-api-loader':
+    specifier: ^1.16.2
+    version: 1.16.2
   '@tanstack/svelte-query':
-    specifier: ^4.32.6
-    version: 4.32.6(svelte@4.1.2)
+    specifier: 5.0.0-beta.15
+    version: 5.0.0-beta.15(svelte@4.1.2)
   ky:
     specifier: ^0.33.3
     version: 0.33.3
@@ -13,49 +16,52 @@ dependencies:
 
 devDependencies:
   '@sveltejs/adapter-auto':
-    specifier: ^2.0.0
+    specifier: ^2.1.0
     version: 2.1.0(@sveltejs/kit@1.22.4)
   '@sveltejs/kit':
-    specifier: ^1.20.4
+    specifier: ^1.22.4
     version: 1.22.4(svelte@4.1.2)(vite@4.4.8)
+  '@types/google.maps':
+    specifier: ^3.53.6
+    version: 3.53.6
   '@types/mapbox-gl':
     specifier: ^2.7.12
     version: 2.7.12
   '@typescript-eslint/eslint-plugin':
-    specifier: ^5.45.0
+    specifier: ^5.62.0
     version: 5.62.0(@typescript-eslint/parser@5.62.0)(eslint@8.46.0)(typescript@5.1.6)
   '@typescript-eslint/parser':
-    specifier: ^5.45.0
+    specifier: ^5.62.0
     version: 5.62.0(eslint@8.46.0)(typescript@5.1.6)
   eslint:
-    specifier: ^8.28.0
+    specifier: ^8.46.0
     version: 8.46.0
   eslint-config-prettier:
-    specifier: ^8.5.0
+    specifier: ^8.10.0
     version: 8.10.0(eslint@8.46.0)
   eslint-plugin-svelte:
-    specifier: ^2.30.0
+    specifier: ^2.32.4
     version: 2.32.4(eslint@8.46.0)(svelte@4.1.2)
   prettier:
-    specifier: ^2.8.0
+    specifier: ^2.8.8
     version: 2.8.8
   prettier-plugin-svelte:
     specifier: ^2.10.1
     version: 2.10.1(prettier@2.8.8)(svelte@4.1.2)
   svelte:
-    specifier: ^4.0.5
+    specifier: ^4.1.2
     version: 4.1.2
   svelte-check:
-    specifier: ^3.4.3
+    specifier: ^3.4.6
     version: 3.4.6(postcss@8.4.27)(svelte@4.1.2)
   tslib:
-    specifier: ^2.4.1
+    specifier: ^2.6.1
     version: 2.6.1
   typescript:
-    specifier: ^5.0.0
+    specifier: ^5.1.6
     version: 5.1.6
   vite:
-    specifier: ^4.4.2
+    specifier: ^4.4.8
     version: 4.4.8
 
 packages:
@@ -307,6 +313,12 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
+  /@googlemaps/js-api-loader@1.16.2:
+    resolution: {integrity: sha512-psGw5u0QM6humao48Hn4lrChOM2/rA43ZCm3tKK9qQsEj1/VzqkCqnvGfEOshDbBQflydfaRovbKwZMF4AyqbA==}
+    dependencies:
+      fast-deep-equal: 3.1.3
+    dev: false
+
   /@humanwhocodes/config-array@0.11.10:
     resolution: {integrity: sha512-KVVjQmNUepDVGXNuoRRdmmEjruj0KfiGSbS8LVc12LMsWDQzRXJ0qdhN8L8uUigKpfEHRhlaQFY0ib1tnUbNeQ==}
     engines: {node: '>=10.10.0'}
@@ -492,16 +504,16 @@ packages:
       - supports-color
     dev: true
 
-  /@tanstack/query-core@4.32.6:
-    resolution: {integrity: sha512-YVB+mVWENQwPyv+40qO7flMgKZ0uI41Ph7qXC2Zf1ft5AIGfnXnMZyifB2ghhZ27u+5wm5mlzO4Y6lwwadzxCA==}
+  /@tanstack/query-core@5.0.0-beta.15:
+    resolution: {integrity: sha512-NaL5qp1K5IhnDD5wEegYpXB0OMPsb+QZNcGR5hWQaDS+30Ga8+zKpfjDn7wHlCKPO2mHCTRqUbQnLWIlt5FKoQ==}
     dev: false
 
-  /@tanstack/svelte-query@4.32.6(svelte@4.1.2):
-    resolution: {integrity: sha512-H08GkuCSB7qysvqlzSqKtd2llkbe+JC3DJFKQE9VHm8H1zR3TgvL4XWWP+eToXXeC19d219N5DZANHYIbaQH4A==}
+  /@tanstack/svelte-query@5.0.0-beta.15(svelte@4.1.2):
+    resolution: {integrity: sha512-mCZHb9wwwC8q/5RIDfRqxGVbKUHAKIQPZ47QIAQadV/vIP69AET/FE+lviawa3GDsgyvMjxvffWSOOrxE1PLmw==}
     peerDependencies:
       svelte: '>=3 <5'
     dependencies:
-      '@tanstack/query-core': 4.32.6
+      '@tanstack/query-core': 5.0.0-beta.15
       svelte: 4.1.2
     dev: false
 
@@ -514,6 +526,10 @@ packages:
 
   /@types/geojson@7946.0.10:
     resolution: {integrity: sha512-Nmh0K3iWQJzniTuPRcJn5hxXkfB1T1pgB89SBig5PlJQU5yocazeu4jATJlaA0GYFKWMqDdvYemoSnF2pXgLVA==}
+    dev: true
+
+  /@types/google.maps@3.53.6:
+    resolution: {integrity: sha512-zDU8c7K0YR1Ob7Wn0qCSQvICIuxilZH9KFIDHK6JO/5QzqEMv8e4+9bmyoDEktA9vPNmwP++zzg65h9y53iZ6Q==}
     dev: true
 
   /@types/json-schema@7.0.12:
@@ -1086,7 +1102,6 @@ packages:
 
   /fast-deep-equal@3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
-    dev: true
 
   /fast-glob@3.3.1:
     resolution: {integrity: sha512-kNFPyjhh5cKjrUltxs+wFx+ZkbRaxxmZ+X0ZU31SOsxCEtP9VPgtq2teZw1DebupL5GmDaNQ6yKMMVcM41iqDg==}
