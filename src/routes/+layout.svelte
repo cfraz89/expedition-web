@@ -48,7 +48,7 @@
 		padding: 0;
 		height: 100vh;
 		display: grid;
-		grid-template-columns: 400px 1fr;
+		grid-template-columns: 600px 1fr;
 		grid-template-rows: 1fr;
 	}
 	#map {

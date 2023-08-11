@@ -35,9 +35,7 @@
 	}
 
 	function formatAddress(address: google.maps.GeocoderAddressComponent[]) {
-		const end = address.findIndex(
-			(c) => c.types.find((t) => t.startsWith('administrative_area') || t === 'country') != null
-		);
+		const end = address.findIndex((c) => c.types.find((t) => t === 'country') != null);
 		return address
 			.slice(0, end)
 			.reduceRight(
