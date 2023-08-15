@@ -5,10 +5,12 @@ const config = {
 	theme: {
 		extend: {
 			colors: {
-				'map-bg': '#87f0ff'
+				'map-bg': '#87f0ff',
+				brand: '#d26060ff'
 			},
 			gridTemplateColumns: {
-				app: '1fr 3fr'
+				app: '1fr 3fr',
+				'route-list': 'max-content 1fr'
 			},
 			gridTemplateRows: {
 				app: 'min-content 1fr'

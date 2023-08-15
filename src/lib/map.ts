@@ -41,7 +41,3 @@ export function initMap() {
 
 	return map;
 }
-
-//Get the map from context
-export const appMap = writable<mapboxgl.Map>();
-export const sidebarRect = writable<DOMRectReadOnly>();

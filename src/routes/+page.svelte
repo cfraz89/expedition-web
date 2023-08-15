@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { appMap, sidebarRect } from '$lib/map';
+	import { appMap, routesLibrary, sidebarRect } from '$lib/stores';
 	import { appKy } from '$lib/net';
 	import type { ListRide, Ride } from '$lib/types';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -10,6 +10,30 @@
 		queryKey: ['rides'],
 		queryFn: () => appKy('rides').json<ListRide[]>()
 	});
+
+	const ridesWithTimings = createQuery(
+		derived([rides, routesLibrary], ([$rides, $routesLibrary]) => ({
+			queryKey: ['ridesWithTimings'],
+			queryFn: () =>
+				new $routesLibrary.DistanceMatrixService()
+					.getDistanceMatrix({
+						origins: [{ lng: 151.2099, lat: -33.865143 }],
+						destinations: $rides.data!.map((r) => ({ lng: r.start_point.x, lat: r.start_point.y })),
+						travelMode: google.maps.TravelMode.DRIVING
+					})
+					.then((matrix) =>
+						$rides.data!.map((ride, i) => {
+							const element = matrix.rows[0].elements[i];
+							return {
+								...ride,
+								distanceFromUser: element.distance.text,
+								timeFromUser: element.duration.text
+							};
+						})
+					),
+			enabled: $routesLibrary != null && $rides.isSuccess
+		}))
+	);
 
 	let selectedRideId = writable<string>();
 
@@ -51,14 +75,16 @@
 </script>
 
 <div>
-	{#if $rides.isLoading}
-		<div>Loading rides</div>
-	{:else if $rides.isError}
-		<div>Error: {$rides.error.message}</div>
-	{:else if $rides.isSuccess}
+	{#if $rides.isLoading || $ridesWithTimings.isLoading}
+		<div class="bg-gray-800 p-4 text-xl font-bold rounded-md">Loading rides</div>
+	{:else if $rides.isError || $ridesWithTimings.isError}
+		<div class="bg-gray-800 p-4 text-xl font-bold rounded-md">
+			Error: {$rides.error?.message ?? $ridesWithTimings.error?.message}
+		</div>
+	{:else if $ridesWithTimings.isSuccess}
 		<div class="flex flex-col gap-2">
 			<h1 class="bg-gray-800 p-4 text-xl font-bold rounded-md">Rides</h1>
-			{#each $rides.data as ride}
+			{#each $ridesWithTimings.data as ride}
 				<button
 					class="bg-gray-800 rounded-md p-4 flex flex-col gap-2 text-start"
 					on:click={() => {
@@ -67,19 +93,20 @@
 					class:bg-slate-500={$selectedRideId === ride.id}
 				>
 					<div class="flex justify-between mb-2">
-						<span class="text-lg font-bold text-orange-300">{ride.name}</span>
-						<span class="font-bold text-orange-300">{Math.round(ride.total_distance / 1000)}km</span
-						>
+						<span class="text-lg font-bold text-brand">{ride.name}</span>
+						<span class="font-bold text-brand">{Math.round(ride.total_distance / 1000)}km</span>
 					</div>
-					<div class="grid [grid-template-columns:4em_1fr]">
+					<div class="grid grid-cols-route-list gap-4">
 						<div class="bold text-gray-300">Start</div>
 						<div>{ride.start_address ? formatAddress(ride.start_address) : 'N/A'}</div>
-					</div>
-					<div class="grid [grid-template-columns:4em_1fr]">
 						<div class="bold text-gray-300">End</div>
 						<div>{ride.end_address ? formatAddress(ride.end_address) : 'N/A'}</div>
-					</div></button
-				>
+						<div class="bold text-gray-300">Distance to start</div>
+						<div>{ride.distanceFromUser}</div>
+						<div class="bold text-gray-300">Time to start</div>
+						<div>{ride.timeFromUser}</div>
+					</div>
+				</button>
 			{/each}
 		</div>
 	{/if}

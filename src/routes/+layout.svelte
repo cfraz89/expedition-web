@@ -1,10 +1,14 @@
 <script lang="ts">
 	import '../app.css';
-	import { onMount, setContext } from 'svelte';
+	import { onMount } from 'svelte';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import { browser } from '$app/environment';
-	import { initMap, appMap, sidebarRect } from '$lib/map';
+	import { appMap, sidebarRect } from '$lib/stores';
 	import logo from '$lib/assets/logo.webp';
+	import { Loader } from '@googlemaps/js-api-loader';
+	import { PUBLIC_GOOGLE_API_KEY } from '$env/static/public';
+	import { routesLibrary } from '$lib/stores';
+	import { initMap } from '$lib/map';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -14,8 +18,14 @@
 		}
 	});
 
-	onMount(() => {
+	onMount(async () => {
 		appMap.set(initMap());
+
+		const loader = new Loader({
+			apiKey: PUBLIC_GOOGLE_API_KEY,
+			version: 'weekly'
+		});
+		loader.importLibrary('routes').then((routes) => routesLibrary.set(routes));
 	});
 </script>
 
@@ -33,7 +43,7 @@
 			<div id="map" class="flex-1" />
 		</div>
 		<div class="col-start-1 row-start-1 z-10 p-4">
-			<img src={logo} alt="logo" class="p-4 w-80 h-auto bg-gray-800 rounded-md bg-opacity-80" />
+			<img src={logo} alt="logo" class="p-4 w-80 h-auto bg-white rounded-md bg-opacity-80" />
 		</div>
 		<div bind:contentRect={$sidebarRect} class="col-start-1 row-start-2 z-10 p-4">
 			<slot />
