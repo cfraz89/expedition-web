@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { appMap } from '$lib/map';
+	import { appMap, sidebarRect } from '$lib/map';
 	import { appKy } from '$lib/net';
 	import type { ListRide, Ride } from '$lib/types';
 	import { createQuery } from '@tanstack/svelte-query';
@@ -25,7 +25,7 @@
 		let { bbox } = $selectedRide.data.geo_json;
 		if (bbox) {
 			let bounds = $appMap.cameraForBounds(bbox as LngLatBoundsLike, {
-				padding: 80,
+				padding: { bottom: 80, right: 80, top: 80, left: 80 + $sidebarRect.right },
 				pitch: 60
 			});
 			if (bounds) {
@@ -50,33 +50,33 @@
 	}
 </script>
 
-<div class="container">
-	<h1>Expedition</h1>
-	<h3>ADV Maps Australia</h3>
+<div>
 	{#if $rides.isLoading}
 		<div>Loading rides</div>
 	{:else if $rides.isError}
 		<div>Error: {$rides.error.message}</div>
 	{:else if $rides.isSuccess}
-		<div class="ride-list">
+		<div class="flex flex-col gap-2">
+			<h1 class="bg-gray-800 p-4 text-xl font-bold rounded-md">Rides</h1>
 			{#each $rides.data as ride}
 				<button
-					class="ride"
+					class="bg-gray-800 rounded-md p-4 flex flex-col gap-2 text-start"
 					on:click={() => {
 						selectedRideId.set(ride.id);
 					}}
-					class:selected={$selectedRideId === ride.id}
+					class:bg-slate-500={$selectedRideId === ride.id}
 				>
-					<div class="name-distance">
-						<span class="name">{ride.name}</span>
-						<span class="distance">{Math.round(ride.total_distance / 1000)}km</span>
+					<div class="flex justify-between mb-2">
+						<span class="text-lg font-bold text-orange-300">{ride.name}</span>
+						<span class="font-bold text-orange-300">{Math.round(ride.total_distance / 1000)}km</span
+						>
 					</div>
-					<div class="start">
-						<div class="label">Start</div>
+					<div class="grid [grid-template-columns:4em_1fr]">
+						<div class="bold text-gray-300">Start</div>
 						<div>{ride.start_address ? formatAddress(ride.start_address) : 'N/A'}</div>
 					</div>
-					<div class="end">
-						<div class="label">End</div>
+					<div class="grid [grid-template-columns:4em_1fr]">
+						<div class="bold text-gray-300">End</div>
 						<div>{ride.end_address ? formatAddress(ride.end_address) : 'N/A'}</div>
 					</div></button
 				>
@@ -84,63 +84,3 @@
 		</div>
 	{/if}
 </div>
-
-<style>
-	.container {
-		padding: 17px;
-		color: #333;
-	}
-	.ride-list {
-		display: flex;
-		flex-direction: column;
-		margin-top: 16px;
-	}
-
-	.ride {
-		color: #666;
-		background: white;
-		border: none;
-		cursor: pointer;
-		text-align: left;
-		padding-top: 16px;
-		padding-bottom: 16px;
-		padding-left: 8px;
-		padding-right: 8px;
-		font-size: 16px;
-		border-bottom: 1px solid #eee;
-		display: flex;
-		flex-direction: column;
-		gap: 8px;
-	}
-
-	.ride.selected {
-		background: #aaaaee;
-	}
-
-	.name-distance {
-		display: flex;
-		justify-content: space-between;
-		margin-bottom: 8px;
-	}
-
-	.ride .name {
-		font-weight: bold;
-		color: #cc3333;
-	}
-	.ride .distance {
-		color: #cc3333;
-	}
-
-	.ride .label {
-		font-size: 12px;
-		font-weight: bold;
-		color: #ee3333;
-	}
-
-	.start,
-	.end {
-		display: flex;
-		gap: 16px;
-		align-items: center;
-	}
-</style>

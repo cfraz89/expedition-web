@@ -1,6 +1,5 @@
 import { PUBLIC_MAPBOX_ACCESS_TOKEN } from '$env/static/public';
 import mapboxgl from 'mapbox-gl';
-import { getContext } from 'svelte';
 import { writable } from 'svelte/store';
 
 export function initMap() {
@@ -45,3 +44,4 @@ export function initMap() {
 
 //Get the map from context
 export const appMap = writable<mapboxgl.Map>();
+export const sidebarRect = writable<DOMRectReadOnly>();
