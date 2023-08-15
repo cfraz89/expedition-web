@@ -36,9 +36,10 @@
 <QueryClientProvider client={queryClient}>
 	<div class="h-screen grid grid-cols-app grid-rows-app gap-y-8 text-white">
 		<div
-			class={`${
-				$appMap ? 'opacity-100' : 'opacity-0 blur-xl grayscale'
-			} background-map-bg transition duration-[2s] flex col-span-full row-span-full`}
+			class:opacity-100={$appMap}
+			class="{$appMap
+				? 'opacity-100'
+				: 'opacity-0 blur-xl grayscale'} background-map-bg transition duration-[2s] flex col-span-full row-span-full"
 		>
 			<div id="map" class="flex-1" />
 		</div>

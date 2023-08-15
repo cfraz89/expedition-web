@@ -85,12 +85,14 @@
 		<div class="flex flex-col gap-2">
 			<h1 class="bg-gray-800 p-4 text-xl font-bold rounded-md">Rides</h1>
 			{#each $ridesWithTimings.data as ride}
+				{@const selected = $selectedRideId === ride.id}
 				<button
-					class="bg-gray-800 rounded-md p-4 flex flex-col gap-2 text-start"
+					class="rounded-md p-4 flex flex-col gap-2 text-start"
 					on:click={() => {
 						selectedRideId.set(ride.id);
 					}}
-					class:bg-slate-500={$selectedRideId === ride.id}
+					class:bg-slate-600={selected}
+					class:bg-slate-800={!selected}
 				>
 					<div class="flex justify-between mb-2">
 						<span class="text-lg font-bold text-brand">{ride.name}</span>
