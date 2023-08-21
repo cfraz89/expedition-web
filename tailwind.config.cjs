@@ -13,7 +13,7 @@ const config = {
 				'route-list': 'max-content 1fr'
 			},
 			gridTemplateRows: {
-				app: 'min-content 1fr'
+				shell: 'min-content 1fr'
 			},
 			dropShadow: {
 				logo: '0 0 2px rgba(0,0.2,0.4,0.2)'

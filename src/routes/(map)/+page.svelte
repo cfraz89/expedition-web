@@ -76,14 +76,14 @@
 
 <div>
 	{#if $rides.isLoading || $ridesWithTimings.isLoading}
-		<div class="bg-gray-800 p-4 text-xl font-bold rounded-md">Loading rides</div>
+		<div class="p-4 text-xl font-bold">Loading rides</div>
 	{:else if $rides.isError || $ridesWithTimings.isError}
-		<div class="bg-gray-800 p-4 text-xl font-bold rounded-md">
+		<div class="p-4 text-xl font-bold">
 			Error: {$rides.error?.message ?? $ridesWithTimings.error?.message}
 		</div>
 	{:else if $ridesWithTimings.isSuccess}
 		<div class="flex flex-col gap-2">
-			<h1 class="bg-gray-800 p-4 text-xl font-bold rounded-md">Rides</h1>
+			<h1 class="p-4 text-xl font-bold">Rides</h1>
 			{#each $ridesWithTimings.data as ride}
 				{@const selected = $selectedRideId === ride.id}
 				<button
