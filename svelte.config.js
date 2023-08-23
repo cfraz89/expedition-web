@@ -14,7 +14,7 @@ const config = {
 		adapter: adapter(),
 		csp: {
 			directives: {
-				'script-src': ['self', 'unsafe-inline', 'blob:', 'unsafe-eval', 'https://*.googleapis.com']
+				'script-src': ['self', 'blob:', 'https://*.googleapis.com']
 			}
 		}
 	}

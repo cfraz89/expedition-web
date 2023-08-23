@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { appMap, routesLibrary, sidebarRect } from '$lib/stores';
 	import { appKy } from '$lib/net';
-	import type { ListRide, Ride } from '$lib/types';
+	import type { ListRide, Ride } from '$lib/ride';
 	import { createQuery } from '@tanstack/svelte-query';
 	import type { GeoJSONSource, LngLatBoundsLike } from 'mapbox-gl';
 	import { derived, writable } from 'svelte/store';
