@@ -1,14 +1,9 @@
-import type { PageServerLoad } from './$types';
+import type { PageLoad } from './$types';
 import { kratosKy } from '$lib/net';
 import { error } from '@sveltejs/kit';
 import type { Flow } from '$lib/kratos';
 
-export const load: PageServerLoad = async (event) => {
-	const cookie = event.request.headers.get('cookie');
-	if (!cookie) {
-		throw error(401, 'No cookie on request');
-	}
-
+export const load: PageLoad = async (event) => {
 	const flowId = event.url.searchParams.get('flow');
 	if (!flowId) {
 		throw error(401, 'No flow id on request');
@@ -16,13 +11,12 @@ export const load: PageServerLoad = async (event) => {
 
 	const flow = await kratosKy
 		.get('self-service/login/flows', {
+			credentials: 'include',
 			searchParams: { id: flowId },
-			headers: {
-				cookie
-			}
+			fetch: event.fetch
 		})
 		.json<Flow>();
-	console.log(flow);
+
 	return {
 		flow
 	};

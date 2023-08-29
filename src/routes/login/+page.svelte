@@ -1,8 +1,7 @@
 <script lang="ts">
-	import type { PageServerData } from './$types';
+	import type { PageData } from './$types';
 
-	export let data: PageServerData;
-	console.log(data.flow.ui.nodes[0].meta.label);
+	export let data: PageData;
 </script>
 
 <div class="flex flex-col items-center px-4 py-8">
