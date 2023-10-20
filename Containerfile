@@ -1,12 +1,15 @@
-FROM node:bookworm-slim
-
-ENV PUBLIC_MAPBOX_ACCESS_TOKEN=$PUBLIC_MAPBOX_ACCESS_TOKEN
-ENV PUBLIC_GOOGLE_API_KEY=$PUBLIC_GOOGLE_API_KEY
-ENV PUBLIC_BACKEND_ORIGIN=$PUBLIC_BACKEND_ORIGIN
-ENV PUBLIC_KRATOS_ORIGIN=$PUBLIC_KRATOS_ORIGIN
+FROM node:bookworm-slim as builder
 
 RUN corepack enable
 COPY . .
 RUN pnpm install
 RUN pnpm build
+
+
+FROM node:bookworm-slim as run
+COPY --from=builder build build
+COPY --from=builder package.json package.json
+COPY --from=builder pnpm-lock.yaml pnpm-lock.yaml
+RUN corepack enable
+RUN pnpm install --prod
 CMD ["node", "build"]

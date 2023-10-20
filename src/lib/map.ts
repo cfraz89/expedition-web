@@ -1,9 +1,8 @@
-import { PUBLIC_MAPBOX_ACCESS_TOKEN } from '$env/static/public';
+import { env } from '$env/dynamic/public';
 import mapboxgl from 'mapbox-gl';
-import { writable } from 'svelte/store';
 
 export function initMap() {
-	mapboxgl.accessToken = PUBLIC_MAPBOX_ACCESS_TOKEN;
+	mapboxgl.accessToken = env.PUBLIC_MAPBOX_ACCESS_TOKEN;
 
 	const map = new mapboxgl.Map({
 		container: 'map',

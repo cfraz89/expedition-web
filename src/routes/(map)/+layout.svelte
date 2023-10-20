@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { appMap, sidebarRect } from '$lib/stores';
 	import { Loader } from '@googlemaps/js-api-loader';
-	import { PUBLIC_GOOGLE_API_KEY } from '$env/static/public';
+	import { env } from '$env/dynamic/public';
 	import { routesLibrary } from '$lib/stores';
 	import { initMap } from '$lib/map';
 
@@ -10,7 +10,7 @@
 		appMap.set(initMap());
 
 		const loader = new Loader({
-			apiKey: PUBLIC_GOOGLE_API_KEY,
+			apiKey: env.PUBLIC_GOOGLE_API_KEY,
 			version: 'weekly'
 		});
 		loader.importLibrary('routes').then((routes) => routesLibrary.set(routes));
