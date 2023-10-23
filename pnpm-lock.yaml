@@ -9,8 +9,8 @@ dependencies:
     specifier: ^1.16.2
     version: 1.16.2
   '@tanstack/svelte-query':
-    specifier: 5.0.0-beta.15
-    version: 5.0.0-beta.15(svelte@4.1.2)
+    specifier: 5.0.5
+    version: 5.0.5(svelte@4.1.2)
   ky:
     specifier: ^0.33.3
     version: 0.33.3
@@ -601,16 +601,16 @@ packages:
       - supports-color
     dev: true
 
-  /@tanstack/query-core@5.0.0-beta.15:
-    resolution: {integrity: sha512-NaL5qp1K5IhnDD5wEegYpXB0OMPsb+QZNcGR5hWQaDS+30Ga8+zKpfjDn7wHlCKPO2mHCTRqUbQnLWIlt5FKoQ==}
+  /@tanstack/query-core@5.0.5:
+    resolution: {integrity: sha512-MThCETMkHDHTnFZHp71L+SqTtD5d6XHftFCVR1xRJdWM3qGrlQ2VCXaj0SKVcyJej2e1Opa2c7iknu1llxCDNQ==}
     dev: false
 
-  /@tanstack/svelte-query@5.0.0-beta.15(svelte@4.1.2):
-    resolution: {integrity: sha512-mCZHb9wwwC8q/5RIDfRqxGVbKUHAKIQPZ47QIAQadV/vIP69AET/FE+lviawa3GDsgyvMjxvffWSOOrxE1PLmw==}
+  /@tanstack/svelte-query@5.0.5(svelte@4.1.2):
+    resolution: {integrity: sha512-NYdxt4oqlduR1S2W1ROc16H2hux4PHHbs27xu75AvgHDEv6BTJOfXODpG/WTLBAkgfWT38Y9a3TXsnutfxjGvg==}
     peerDependencies:
       svelte: '>=3 <5'
     dependencies:
-      '@tanstack/query-core': 5.0.0-beta.15
+      '@tanstack/query-core': 5.0.5
       svelte: 4.1.2
     dev: false
 

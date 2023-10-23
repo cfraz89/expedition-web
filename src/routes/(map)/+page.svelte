@@ -23,13 +23,20 @@
 					})
 					.then((matrix) =>
 						$rides.data!.map((ride, i) => {
-							const element = matrix.rows[0].elements[i];
+							const distanceMatrixElement = matrix.rows[0].elements[i];
 							return {
 								...ride,
-								distanceFromUser: element.distance.text,
-								timeFromUser: element.duration.text
+								distanceFromUser: distanceMatrixElement.distance.text,
+								timeFromUser: distanceMatrixElement.duration.text
 							};
 						})
+					)
+					.catch(() =>
+						$rides.data?.map((ride) => ({
+							...ride,
+							distanceFromUser: 'Err',
+							timeFromUser: 'Err'
+						}))
 					),
 			enabled: $routesLibrary != null && $rides.isSuccess
 		}))

@@ -36,7 +36,7 @@
 	"type": "module",
 	"dependencies": {
 		"@googlemaps/js-api-loader": "^1.16.2",
-		"@tanstack/svelte-query": "5.0.0-beta.15",
+		"@tanstack/svelte-query": "5.0.5",
 		"ky": "^0.33.3",
 		"mapbox-gl": "^2.15.0"
 	}
