@@ -3,11 +3,9 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	console.log(data);
 </script>
 
 <div class="flex flex-col items-center px-4 py-8">
-	<h1 class="text-xl font-bold">Login</h1>
+	<h1 class="text-xl font-bold">Registration</h1>
 	<KratosUiForm ui={data.flow.ui} />
 </div>

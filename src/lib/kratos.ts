@@ -28,7 +28,7 @@ export interface Node {
 		disabled: boolean;
 		node_type: string;
 	};
-	messages: string[];
+	messages: { text: string; type: 'error' }[];
 	meta: { label?: { text: string; type: 'info'; context: any } };
 }
 
@@ -48,4 +48,15 @@ export interface KratosError {
 	};
 	created_at: string;
 	updated_at: string;
+}
+
+export interface WhoAmI {
+	active: boolean;
+	identity: {
+		traits: {
+			email: string;
+			first_name?: string;
+			last_name?: string;
+		};
+	};
 }

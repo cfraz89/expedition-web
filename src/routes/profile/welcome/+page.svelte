@@ -1,1 +1,0 @@
-<div>Welcome user!</div>
