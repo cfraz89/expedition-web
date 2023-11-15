@@ -15,8 +15,8 @@ export const load: LayoutServerLoad = async (event) => {
 			whoami
 		};
 	} catch (e) {
-		if (e instanceof HTTPError) {
-			console.log('whoami http error', e.response.status);
+		//Not logged in
+		if (e instanceof HTTPError && e.response.status == 401) {
 			return { whoami: undefined };
 		}
 		throw e;

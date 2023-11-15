@@ -8,8 +8,6 @@
 
 	export let data: LayoutData;
 
-	console.log(data.whoami);
-
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {

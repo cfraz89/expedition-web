@@ -9,8 +9,8 @@ const config = {
 				brand: '#d26060ff'
 			},
 			gridTemplateColumns: {
-				app: '1fr 3fr',
-				'route-list': 'max-content 1fr'
+				app: '1fr 2fr',
+				'route-list': 'max-content auto min-content auto'
 			},
 			gridTemplateRows: {
 				shell: 'min-content 1fr'
