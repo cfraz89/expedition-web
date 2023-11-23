@@ -19,6 +19,7 @@ export const load: LayoutServerLoad = async (event) => {
 		if (e instanceof HTTPError && e.response.status == 401) {
 			return { whoami: undefined };
 		}
+		console.log('Whoami load failed. Is kratos running?');
 		throw e;
 	}
 };

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { Flow } from '$lib/kratos';
 
-	export let ui: Flow['ui'];
+	const { ui } = $props<{ ui: Flow['ui'] }>();
 </script>
 
 <div>
