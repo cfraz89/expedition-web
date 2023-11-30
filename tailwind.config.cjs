@@ -10,7 +10,7 @@ const config = {
 			},
 			gridTemplateColumns: {
 				app: '1fr 2fr',
-				'route-list': 'max-content auto min-content auto'
+				'route-list': 'max-content auto auto'
 			},
 			gridTemplateRows: {
 				shell: 'min-content 1fr'

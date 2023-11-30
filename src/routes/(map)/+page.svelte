@@ -1,63 +1,17 @@
 <script lang="ts">
 	import { app } from '$lib/app.svelte';
 	import { appKy } from '$lib/net';
-	import type { ListRide, Ride } from '$lib/ride';
+	import type { Address, ListRide, Ride } from '$lib/ride';
 	import type { GeoJSONSource, LngLatBoundsLike } from 'mapbox-gl';
 
-	type Distance = { distanceFromUser: string; timeFromUser: string };
-	type RideWithDistances = ListRide & {
-		startDistance: Distance;
-		endDistance: Distance;
-	};
-	async function getRides(): Promise<RideWithDistances[]> {
-		const rides = await appKy('rides').json<ListRide[]>();
-		if (!app.routesLibrary) {
-			return new Promise(() => {});
-		}
-		try {
-			const distanceMatrixService = new app.routesLibrary.DistanceMatrixService();
-			const [startMatrix, endMatrix] = await Promise.all([
-				distanceMatrixService.getDistanceMatrix({
-					origins: [{ lng: 151.2099, lat: -33.865143 }],
-					destinations: rides.map((r) => ({ lng: r.start_point.x, lat: r.start_point.y })),
-					travelMode: google.maps.TravelMode.DRIVING
-				}),
-				distanceMatrixService.getDistanceMatrix({
-					origins: rides.map((r) => ({ lng: r.end_point.x, lat: r.end_point.y })),
-					destinations: [{ lng: 151.2099, lat: -33.865143 }],
-					travelMode: google.maps.TravelMode.DRIVING
-				})
-			]);
-			return rides.map((ride, i) => {
-				const startDistanceMatrixElement = startMatrix.rows[0].elements[i];
-				const endDistanceMatrixElement = endMatrix.rows[i].elements[0];
-				return {
-					...ride,
-					startDistance: {
-						distanceFromUser: startDistanceMatrixElement.distance.text,
-						timeFromUser: startDistanceMatrixElement.duration.text
-					},
-					endDistance: {
-						distanceFromUser: endDistanceMatrixElement.distance.text,
-						timeFromUser: endDistanceMatrixElement.duration.text
-					}
-				};
-			});
-		} catch {
-			return rides.map((ride) => ({
-				...ride,
-				startDistance: {
-					distanceFromUser: 'Err',
-					timeFromUser: 'Err'
-				},
-				endDistance: {
-					distanceFromUser: 'Err',
-					timeFromUser: 'Err'
-				}
-			}));
-		}
-	}
-	const rides = $derived(getRides());
+	let rides = $state<Promise<ListRide[]>>(appKy('rides').json<ListRide[]>());
+	$effect(() => {
+		navigator.geolocation.getCurrentPosition((position) => {
+			rides = appKy('rides', {
+				searchParams: { lat: position.coords.latitude, lon: position.coords.longitude }
+			}).json<ListRide[]>();
+		});
+	});
 
 	class SelectedRide {
 		id = $state<string>();
@@ -86,20 +40,17 @@
 		}
 	});
 
-	function formatAddress(address: google.maps.GeocoderAddressComponent[]) {
-		const end = address.findIndex((c) => c.types.find((t) => t === 'country') != null);
-		return address
-			.slice(0, end)
-			.filter((comp) => !comp.types.find((v) => v.startsWith('administrative_area')))
-			.reduceRight(
-				(addr: string[], c) =>
-					c.types.includes('street_number')
-						? [`${c.short_name} ${addr[0]}`, ...addr.slice(1)]
-						: [c.short_name, ...addr],
-				[]
-			)
-			.map((addr) => `<div>${addr}</div>`)
-			.join('');
+	function formatAddress(address: Address) {
+		return [
+			address.tourism,
+			address.road,
+			address.suburb,
+			address.city,
+			address.state,
+			address.postcode
+		]
+			.filter((a) => a != null)
+			.join(', ');
 	}
 
 	function formatTime(t: number) {
@@ -126,31 +77,25 @@
 					class:bg-slate-600={selected}
 					class:bg-slate-800={!selected}
 				>
-					<div class="flex justify-between mb-2">
-						<span class="text-lg font-bold text-brand">{ride.name}</span>
-					</div>
 					<div class="grid grid-cols-route-list gap-4">
-						<div class="font-bold text-white">Start</div>
-						<div class="col-span-3">
-							{@html ride.start_address ? formatAddress(ride.start_address) : 'N/A'}
-						</div>
-						<div class="text-gray-300 ml-2">Distance from home</div>
-						<div>{ride.startDistance.distanceFromUser}</div>
-						<div class="text-gray-300">Time</div>
-						<div>{ride.startDistance.timeFromUser}</div>
-						<div class="font-bold text-white">Ride</div>
-						<div class="font-bold text-brand col-span-2">
+						<div class="text-lg font-bold text-brand col-span-2">{ride.name}</div>
+						<div class="font-bold text-brand">
 							{Math.round(ride.total_distance / 1000)}km
 						</div>
-						<div class="font-bold text-brand">{formatTime(ride.ride_time)}</div>
+						<div class="font-bold text-white">Start</div>
+						<div>
+							{@html ride.start_address ? formatAddress(ride.start_address) : 'N/A'}
+						</div>
+						<div class="text-gray-400">
+							{ride.time_from_origin_to_start ? formatTime(ride.time_from_origin_to_start) : ''}
+						</div>
 						<div class="font-bold text-white">End</div>
-						<div class="col-span-3">
+						<div>
 							{@html ride.end_address ? formatAddress(ride.end_address) : 'N/A'}
 						</div>
-						<div class="text-gray-300 ml-2">Distance to home</div>
-						<div>{ride.endDistance.distanceFromUser}</div>
-						<div class="text-gray-300">Time</div>
-						<div>{ride.endDistance.timeFromUser}</div>
+						<div class="text-gray-400">
+							{ride.time_from_end_to_origin ? formatTime(ride.time_from_end_to_origin) : ''}
+						</div>
 					</div></button
 				>
 			{/each}

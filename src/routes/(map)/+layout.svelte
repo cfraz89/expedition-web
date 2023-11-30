@@ -4,7 +4,7 @@
 	import { env } from '$env/dynamic/public';
 	import { initMap } from '$lib/map';
 
-	const { children } = $props<{children: ()=>any}>()
+	const { children } = $props<{ children: () => any }>();
 
 	$effect(() => {
 		app.map = initMap();
@@ -32,7 +32,7 @@
 	</div>
 	<div bind:contentRect={app.sidebarRect} class="col-start-1 row-start-1 z-10 p-4">
 		<div class="bg-gray-800 rounded-md">
-			{@render children()}
+			<slot />
 		</div>
 	</div>
 </div>
