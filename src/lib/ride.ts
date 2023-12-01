@@ -11,6 +11,7 @@ export type ListRide = {
 };
 export type Ride = ListRide & {
 	geo_json: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+	ways: RideWay[];
 };
 export type Address = {
 	tourism?: string;
@@ -21,6 +22,11 @@ export type Address = {
 	state: string;
 	postcode: string;
 	country: string;
+};
+
+export type RideWay = {
+	place_id: number;
+	distance: number;
 };
 
 export interface Point {
