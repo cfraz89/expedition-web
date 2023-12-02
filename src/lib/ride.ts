@@ -25,8 +25,16 @@ export type Address = {
 };
 
 export type RideWay = {
-	place_id: number;
 	distance: number;
+	place: NominatimDetailsPlace;
+};
+
+export type NominatimDetailsPlace = {
+	osm_id: number;
+	localname: string;
+	extratags: {
+		surface?: string;
+	};
 };
 
 export interface Point {

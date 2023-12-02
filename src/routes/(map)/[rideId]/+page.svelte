@@ -55,6 +55,10 @@
 		const seconds = Math.floor(t - hours * 3600 - minutes * 60);
 		return `${hours}h ${minutes}m ${seconds}s`;
 	}
+
+	function formatDistance(distance: number) {
+		return `${Math.round(distance / 1000)}km`;
+	}
 </script>
 
 <div>
@@ -84,12 +88,22 @@
 					{ride.time_from_end_to_origin ? formatTime(ride.time_from_end_to_origin) : ''}
 				</div>
 			</div>
-			{#each ride.ways as way}
-				<div class="text-gray-400">
-					{way.place_id}
-					{way.distance}
-				</div>
-			{/each}
+			<div class="text-gray-400 grid grid-cols-4">
+				{#each ride.ways as way}
+					<div>
+						{way.place.localname}
+					</div>
+					<div>
+						{way.place.extratags.surface}
+					</div>
+					<div>
+						{formatDistance(way.distance)}
+					</div>
+					<div>
+						{way.place.osm_id}
+					</div>
+				{/each}
+			</div>
 		</div>
 	{:catch error}
 		<div class="p-4 text-xl font-bold">
