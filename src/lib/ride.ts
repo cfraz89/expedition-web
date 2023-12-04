@@ -15,12 +15,14 @@ export type Ride = ListRide & {
 };
 export type Address = {
 	tourism?: string;
+	amenity?: string;
 	road: string;
-	suburb: string;
-	city: string;
-	municpality: string;
+	town?: string;
+	suburb?: string;
+	city?: string;
+	municpality?: string;
 	state: string;
-	postcode: string;
+	postcode?: string;
 	country: string;
 };
 

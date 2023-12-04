@@ -68,8 +68,8 @@
 		<div class="flex flex-col gap-2 p-4">
 			<a href="/">Back</a>
 			<h1 class="text-xl font-bold">{ride.name}</h1>
-			<div class="grid grid-cols-route-list gap-4">
-				<div class="font-bold text-white col-span-2">Distance</div>
+			<div class="grid grid-cols-route gap-4">
+				<div class="font-bold text-white">Distance</div>
 				<div class="font-bold text-brand">
 					{Math.round(ride.total_distance / 1000)}km
 				</div>
@@ -77,18 +77,23 @@
 				<div>
 					{@html ride.start_address ? formatAddress(ride.start_address) : 'N/A'}
 				</div>
-				<div class="text-gray-400">
-					{ride.time_from_origin_to_start ? formatTime(ride.time_from_origin_to_start) : ''}
+				<div class="text-brand col-start-2 col-span-1">
+					{ride.time_from_origin_to_start
+						? formatTime(ride.time_from_origin_to_start) + ' to arrive'
+						: ''}
 				</div>
 				<div class="font-bold text-white">End</div>
 				<div>
 					{@html ride.end_address ? formatAddress(ride.end_address) : 'N/A'}
 				</div>
-				<div class="text-gray-400">
-					{ride.time_from_end_to_origin ? formatTime(ride.time_from_end_to_origin) : ''}
+				<div class="text-brand col-start-2 col-span-1">
+					{ride.time_from_end_to_origin
+						? formatTime(ride.time_from_end_to_origin) + ' to return'
+						: ''}
 				</div>
 			</div>
-			<div class="text-gray-400 grid grid-cols-4">
+			<h3 class="font-bold">Roads</h3>
+			<div class="text-white grid grid-cols-3">
 				{#each ride.ways as way}
 					<div>
 						{way.place.localname}
@@ -96,11 +101,8 @@
 					<div>
 						{way.place.extratags.surface}
 					</div>
-					<div>
+					<div class="text-gray-400">
 						{formatDistance(way.distance)}
-					</div>
-					<div>
-						{way.place.osm_id}
 					</div>
 				{/each}
 			</div>
