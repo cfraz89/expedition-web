@@ -1,38 +1,12 @@
-# create-svelte
+# expedition-server
+The frontend for Expedition, an application to catalogue and analyse adventure motorcycle rides, uploaded from GPX files. Frontend uses Sveltekit on Svelte 5. Mapbox is used to render the map
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+![screenshot](/expedition.png "screenshot")
 
-## Creating a project
+# Features:
+ - list rides, their start and end addresses, and your riding time from start and end (data from OpenStreetMap and google maps)
+ - ride details, breaking down the distance travelled on each road and its surface (data from self-hosted OpenStreetMap nominatim server)
+ - display ride path on a 3D map (Mapbox)
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+# Deployment
+One day
